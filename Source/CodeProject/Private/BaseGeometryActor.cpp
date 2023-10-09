@@ -19,8 +19,21 @@ void ABaseGeometryActor::BeginPlay()
 {
 	Super::BeginPlay();
 	PrintTypes();
-	
+	InitialLocation = GetActorLocation();
 	PrintStringTypes();
+}
+
+void ABaseGeometryActor::PrintTransform() 
+{
+	FTransform ftrans = GetActorTransform();
+	FVector location = ftrans.GetLocation();
+	FRotator rotator = ftrans.Rotator();
+	FVector Scale = ftrans.GetScale3D();
+	UE_LOG(LogCodeProject, Display, TEXT("Name: % s"), *GetName());
+	UE_LOG(LogCodeProject, Display, TEXT("Name: % s"), *ftrans.ToHumanReadableString());
+	UE_LOG(LogCodeProject, Display, TEXT("Location: % s"), *location.ToString());
+	UE_LOG(LogCodeProject, Display, TEXT("Rotator: % s"), *rotator.ToString());
+	UE_LOG(LogCodeProject, Display, TEXT("Scale: % s"), *Scale.ToString());
 }
 
 void ABaseGeometryActor::PrintStringTypes()
@@ -43,7 +56,19 @@ void ABaseGeometryActor::PrintStringTypes()
 void ABaseGeometryActor::Tick(float DeltaTime)
 { 
 	Super::Tick(DeltaTime);
-
+	float time = GetWorld()->GetTimeSeconds();
+	FVector currLocation = GetActorLocation();
+	currLocation.Z = InitialLocation.Z + Amplitude * FMath::Sin(Frequency * time);
+	SetActorLocation(currLocation);
+	switch (moveType)
+	{
+	case MovementType::Sin:
+		break;
+	case MovementType::Static:
+		break;
+	default:
+		break;
+	}
 }
 
 
