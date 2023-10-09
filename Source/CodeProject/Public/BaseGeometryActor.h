@@ -7,10 +7,27 @@
 #include "Components/StaticMeshComponent.h"
 #include "BaseGeometryActor.generated.h"
 
-enum class MovementType
+UENUM(BlueprintType)
+enum class EMovementType : uint8
 {
 	Sin,
 	Static
+};
+
+USTRUCT(BlueprintType)
+struct FGeometryData 
+{
+	GENERATED_USTRUCT_BODY()
+	UPROPERTY(EditAnyWhere, Category = "Movement")
+	float Amplitude = 50.0f;
+	UPROPERTY(EditAnyWhere, Category = "Movement")
+	float Frequency = 2.0f;
+	UPROPERTY(EditAnyWhere, Category = "Movement")
+	EMovementType MoveType = EMovementType::Static;
+	UPROPERTY(EditAnyWhere, Category = "Design")
+	FLinearColor Color = FLinearColor::Black;
+	UPROPERTY(EditAnyWhere, Category = "Design")
+	float TimerRate = 3.0f;
 };
 
 UCLASS()
@@ -24,21 +41,19 @@ public:
 
 	UPROPERTY(VisibleAnyWhere)
 	UStaticMeshComponent* BaseMesh;
+	void SetGeometryData(const FGeometryData& Data) { MoveData = Data; }
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnyWhere, Category ="Movement")
-	float Amplitude = 50.0f;	
-	UPROPERTY(EditAnyWhere, Category ="Movement")
-	float Frequency = 2.0f;
+	UPROPERTY(EditAnyWhere, Category = "Geometry Data")
+	FGeometryData MoveData;
+
 	UPROPERTY(EditAnyWhere, Category = "Weapon")
 	int32 WeaponNum = 4;
 	UPROPERTY(EditDefaultsOnly, Category = "Kills")
 	int32 KillCount = 15;
-
-	MovementType moveType = MovementType::Static;
 
 	UPROPERTY(EditInstanceOnly, Category = "Health")
 	float Health = 125.25f;
@@ -53,7 +68,14 @@ public:
 
 private:
 	FVector InitialLocation;
+	FTimerHandle TimerHandle;
+
+	const int32 MaxTimerCount = 5;
+	int32 TimerCount = 0;
 	void PrintTypes();
 	void PrintStringTypes();
 	void PrintTransform();
+	void HandleMovement();
+	void SetColor(const FLinearColor& Color);
+	void OnTimerFired();
 };

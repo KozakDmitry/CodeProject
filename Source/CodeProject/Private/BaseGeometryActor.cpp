@@ -3,6 +3,9 @@
 
 #include "BaseGeometryActor.h"
 #include "Engine/Engine.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "TimerManager.h"
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogCodeProject, All, All)
 // Sets default values
@@ -19,8 +22,10 @@ void ABaseGeometryActor::BeginPlay()
 {
 	Super::BeginPlay();
 	PrintTypes();
+	SetColor(MoveData.Color);
 	InitialLocation = GetActorLocation();
 	PrintStringTypes();
+	GetWorldTimerManager().SetTimer(TimerHandle,this,&ABaseGeometryActor::OnTimerFired, MoveData.TimerRate,true);
 }
 
 void ABaseGeometryActor::PrintTransform() 
@@ -56,18 +61,49 @@ void ABaseGeometryActor::PrintStringTypes()
 void ABaseGeometryActor::Tick(float DeltaTime)
 { 
 	Super::Tick(DeltaTime);
-	float time = GetWorld()->GetTimeSeconds();
-	FVector currLocation = GetActorLocation();
-	currLocation.Z = InitialLocation.Z + Amplitude * FMath::Sin(Frequency * time);
-	SetActorLocation(currLocation);
-	switch (moveType)
+	
+	switch (MoveData.MoveType)
 	{
-	case MovementType::Sin:
+	case EMovementType::Sin:
+	{
+		HandleMovement();
 		break;
-	case MovementType::Static:
+	}
+	case EMovementType::Static:
 		break;
 	default:
 		break;
+	}
+}
+
+void ABaseGeometryActor::HandleMovement()
+{
+	float time = GetWorld()->GetTimeSeconds();
+	FVector currLocation = GetActorLocation();
+	currLocation.Z = InitialLocation.Z + MoveData.Amplitude * FMath::Sin(MoveData.Frequency * time);
+	SetActorLocation(currLocation);
+}
+
+void ABaseGeometryActor::SetColor(const FLinearColor& Color)
+{
+	UMaterialInstanceDynamic* DynMaterial = BaseMesh->CreateAndSetMaterialInstanceDynamic(0);
+	if (DynMaterial)
+	{
+		DynMaterial->SetVectorParameterValue("Color", Color);
+	}
+}
+
+void ABaseGeometryActor::OnTimerFired()
+{
+	if (++TimerCount <= MaxTimerCount)
+	{
+	const FLinearColor NewColor = FLinearColor::MakeRandomColor();
+	UE_LOG(LogCodeProject, Display, TEXT("Color to set up %s"), *NewColor.ToString());
+	SetColor(NewColor);
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(TimerHandle);
 	}
 }
 
