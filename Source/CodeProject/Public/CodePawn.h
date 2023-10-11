@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "CodePawn.generated.h"
 
+class UCameraComponent;
+
 UCLASS()
 class CODEPROJECT_API ACodePawn : public APawn
 {
@@ -18,8 +20,13 @@ public:
 	UPROPERTY(VisibleAnyWhere)
 	USceneComponent* SceneComponent;
 
+	UPROPERTY(VisibleAnyWhere)
+	UStaticMeshComponent* StaticMeshComponent;
+	UPROPERTY(VisibleAnyWhere)
+	UCameraComponent* CameraComponent;
+
 	UPROPERTY(EditAnyWhere)
-	float velocity = 300.0f;
+	float Velocity = 300.0f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,7 +39,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 private:
-	FVector velocityVector = FVector::ZeroVector;
+	FVector VelocityVector = FVector::ZeroVector;
 	void MoveForward(float Amount);
 	void MoveSides(float Amount);
 };
