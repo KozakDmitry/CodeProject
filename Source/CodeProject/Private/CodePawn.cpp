@@ -23,6 +23,8 @@ ACodePawn::ACodePawn()
 
 }
 
+
+
 // Called when the game starts or when spawned
 void ACodePawn::BeginPlay()
 {
@@ -38,7 +40,7 @@ void ACodePawn::Tick(float DeltaTime)
 	{
 		const FVector NewLocation = GetActorLocation() + Velocity * DeltaTime * VelocityVector;
 		SetActorLocation(NewLocation);
-
+		VelocityVector = FVector::ZeroVector;
 	}
 }	
 
@@ -61,4 +63,15 @@ void ACodePawn::MoveSides(float Amount)
 {
 	UE_LOG(LogCodePawn, Display, TEXT("Move Sides %f"), Amount);
 	VelocityVector.Y = Amount;
+}
+
+void ACodePawn::PossessedBy(AController* NewController)
+{
+	if(NewController)
+	Super::PossessedBy(NewController);
+}
+
+void ACodePawn::UnPossessed()
+{
+	Super::UnPossessed();
 }

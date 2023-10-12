@@ -3,10 +3,12 @@
 
 #include "MyGameModeBase.h"
 #include "CodePawn.h"
+#include "CodePlayerController.h"
 
 AMyGameModeBase::AMyGameModeBase()
 {
 	DefaultPawnClass = ACodePawn::StaticClass();
+	PlayerControllerClass = ACodePlayerController::StaticClass();
 }
 
 
