@@ -24,7 +24,7 @@ public:
 	UStaticMeshComponent* StaticMeshComponent;
 	UPROPERTY(VisibleAnyWhere)
 	UCameraComponent* CameraComponent;
-
+	
 	UPROPERTY(EditAnyWhere)
 	float Velocity = 300.0f;
 	
