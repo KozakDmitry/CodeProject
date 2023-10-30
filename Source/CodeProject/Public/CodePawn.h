@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "CodePawn.generated.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "CodePawn.generated.h"
 
 class UCameraComponent;
 
