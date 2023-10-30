@@ -2,47 +2,48 @@
 
 #pragma once
 
+#include "CodePawn.generated.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "CodePawn.generated.h"
 
 class UCameraComponent;
 
 UCLASS()
 class CODEPROJECT_API ACodePawn : public APawn
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	// Sets default values for this pawn's properties
-	ACodePawn();
+  public:
+    // Sets default values for this pawn's properties
+    ACodePawn();
 
-	UPROPERTY(VisibleAnyWhere)
-	USceneComponent* SceneComponent;
+    UPROPERTY(VisibleAnyWhere)
+    USceneComponent *SceneComponent;
 
-	UPROPERTY(VisibleAnyWhere)
-	UStaticMeshComponent* StaticMeshComponent;
-	UPROPERTY(VisibleAnyWhere)
-	UCameraComponent* CameraComponent;
-	
-	UPROPERTY(EditAnyWhere)
-	float Velocity = 300.0f;
-	
-	virtual void PossessedBy(AController* NewController) override;
-	virtual void UnPossessed() override;
+    UPROPERTY(VisibleAnyWhere)
+    UStaticMeshComponent *StaticMeshComponent;
+    UPROPERTY(VisibleAnyWhere)
+    UCameraComponent *CameraComponent;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    UPROPERTY(EditAnyWhere)
+    float Velocity = 300.0f;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+    virtual void PossessedBy(AController *NewController) override;
+    virtual void UnPossessed() override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-private:
-	FVector VelocityVector = FVector::ZeroVector;
-	void MoveForward(float Amount);
-	void MoveSides(float Amount);
+  protected:
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+
+  public:
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
+
+    // Called to bind functionality to input
+    virtual void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
+
+  private:
+    FVector VelocityVector = FVector::ZeroVector;
+    void MoveForward(float Amount);
+    void MoveSides(float Amount);
 };
